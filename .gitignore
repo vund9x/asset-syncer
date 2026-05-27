@@ -1,0 +1,18 @@
+# Compiled binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+mpv-updater
+asset-syncer
+asset-syncer.exe
+
+# Go workspace / build artifacts
+/bin/
+/pkg/
+/obj/
+
+# OS-generated files
+.DS_Store
+Thumbs.db

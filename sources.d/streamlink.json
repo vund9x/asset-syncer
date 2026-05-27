@@ -1,0 +1,14 @@
+{
+  "sources": [
+    {
+      "name": "streamlink",
+      "type": "release",
+      "repo": "streamlink/windows-builds",
+      "tag": "latest",
+      "asset": "streamlink-*-py*-x86_64.zip",
+      "extract": true,
+      "strip_components": 1,
+      "dest": "../streamlink"
+    }
+  ]
+}

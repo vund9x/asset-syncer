@@ -1,0 +1,6 @@
+{
+  "root": "../portable_config",
+  "include": [
+    "sources.d/*.json"
+  ]
+}

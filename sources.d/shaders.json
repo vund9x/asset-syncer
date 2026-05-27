@@ -1,0 +1,233 @@
+{
+  "sources": [
+    {
+      "name": "shader-ACNet",
+      "type": "repo",
+      "repo": "TianZerL/ACNetGLSL",
+      "branch": "master",
+      "path_prefix": "glsl",
+      "dest": "shaders/ACNet",
+      "include": [
+        "acnet_gan.glsl"
+      ],
+      "disabled": true
+    },
+    {
+      "name": "CAS-scaled",
+      "type": "file",
+      "url": "https://gist.github.com/agyild/bbb4e58298b2f86aa24da3032a0d2ee6/raw/CAS-scaled.glsl",
+      "dest": "shaders/AMD and Nvidia/CAS-scaled.glsl"
+    },
+    {
+      "name": "CAS",
+      "type": "file",
+      "url": "https://gist.github.com/agyild/bbb4e58298b2f86aa24da3032a0d2ee6/raw/CAS.glsl",
+      "dest": "shaders/AMD and Nvidia/CAS.glsl"
+    },
+    {
+      "name": "FSR",
+      "type": "file",
+      "url": "https://gist.github.com/agyild/82219c545228d70c5604f865ce0b0ce5/raw/FSR.glsl",
+      "dest": "shaders/AMD and Nvidia/FSR.glsl"
+    },
+    {
+      "name": "NVScaler",
+      "type": "file",
+      "url": "https://gist.github.com/agyild/7e8951915b2bf24526a9343d951db214/raw/NVScaler.glsl",
+      "dest": "shaders/AMD and Nvidia/NVScaler.glsl"
+    },
+    {
+      "name": "NVSharpen",
+      "type": "file",
+      "url": "https://gist.github.com/agyild/7e8951915b2bf24526a9343d951db214/raw/NVSharpen.glsl",
+      "dest": "shaders/AMD and Nvidia/NVSharpen.glsl"
+    },
+    {
+      "name": "shader-anime4k",
+      "type": "repo",
+      "repo": "bloc97/Anime4K",
+      "branch": "master",
+      "path_prefix": "glsl",
+      "dest": "shaders/Anime4K",
+      "include": [
+        "*.glsl",
+        "**/*.glsl"
+      ]
+    },
+    {
+      "name": "shader-artcnn",
+      "type": "repo",
+      "repo": "Artoriuz/ArtCNN",
+      "branch": "main",
+      "path_prefix": "glsl",
+      "dest": "shaders/ArtCNN",
+      "include": [
+        "*.glsl"
+      ]
+    },
+    {
+      "name": "shader-Chroma-cfl",
+      "type": "repo",
+      "repo": "Artoriuz/glsl-chroma-from-luma-prediction",
+      "branch": "main",
+      "path_prefix": "",
+      "dest": "shaders/Chroma",
+      "include": [
+        "*.glsl"
+      ]
+    },
+    {
+      "name": "shader-Chroma-jb",
+      "type": "repo",
+      "repo": "Artoriuz/glsl-joint-bilateral",
+      "branch": "main",
+      "path_prefix": "",
+      "dest": "shaders/Chroma",
+      "include": [
+        "*.glsl"
+      ]
+    },
+    {
+      "name": "shader-Chroma",
+      "type": "file",
+      "url": "https://gist.github.com/igv/a015fc885d5c22e6891820ad89555637/raw/KrigBilateral.glsl",
+      "dest": "shaders/Chroma/KrigBilateral.glsl"
+    },
+    {
+      "name": "shader-cunny",
+      "type": "repo",
+      "repo": "funnyplanter/CuNNy",
+      "branch": "master",
+      "path_prefix": "mpv",
+      "dest": "shaders/CuNNy",
+      "include": [
+        "*.glsl",
+        "**/*.glsl"
+      ]
+    },
+    {
+      "name": "shader-Film grain",
+      "type": "repo",
+      "repo": "haasn/gentoo-conf",
+      "branch": "xor",
+      "path_prefix": "home/nand/.mpv/shaders/",
+      "dest": "shaders/Film grain",
+      "include": [
+        "film-grain-*.glsl"
+      ]
+    },
+    {
+      "name": "shader-FSRCNNX-igv",
+      "type": "release",
+      "repo": "igv/FSRCNN-TensorFlow",
+      "tag": "latest",
+      "asset": "FSRCNNX_x2_*.glsl",
+      "dest": "shaders/FSRCNNX"
+    },
+    {
+      "name": "shader-FSRCNNX-helpseeker",
+      "type": "release",
+      "repo": "HelpSeeker/FSRCNN-TensorFlow",
+      "tag": "latest",
+      "asset": "FSRCNNX_x2_*.glsl",
+      "dest": "shaders/FSRCNNX"
+    },
+    {
+      "name": "shader-NNEDI3",
+      "type": "repo",
+      "repo": "bjin/mpv-prescalers",
+      "branch": "master",
+      "path_prefix": "gather",
+      "dest": "shaders/NNEDI3",
+      "include": [
+        "nnedi3-*.hook"
+      ]
+    },
+    {
+      "name": "shader-RAVU",
+      "type": "repo",
+      "repo": "bjin/mpv-prescalers",
+      "branch": "master",
+      "path_prefix": "gather",
+      "dest": "shaders/RAVU",
+      "include": [
+        "ravu-r*.hook",
+        "ravu-zoom-ar-r3-rgb.hook"
+      ]
+    },
+    {
+      "name": "shader-RAVU Lite",
+      "type": "repo",
+      "repo": "bjin/mpv-prescalers",
+      "branch": "master",
+      "path_prefix": "gather",
+      "dest": "shaders/RAVU/RAVU Lite",
+      "include": [
+        "ravu-lite-r*.hook"
+      ]
+    },
+    {
+      "name": "shader-RAVU Lite Antiringing",
+      "type": "repo",
+      "repo": "bjin/mpv-prescalers",
+      "branch": "master",
+      "path_prefix": "gather",
+      "dest": "shaders/RAVU/RAVU Lite Antiringing",
+      "include": [
+        "ravu-lite-ar-r*.hook"
+      ]
+    },
+    {
+      "name": "shader-RAVU Zoom",
+      "type": "repo",
+      "repo": "bjin/mpv-prescalers",
+      "branch": "master",
+      "path_prefix": "gather",
+      "dest": "shaders/RAVU/RAVU Zoom",
+      "include": [
+        "ravu-zoom-r*.hook"
+      ]
+    },
+    {
+      "name": "shader-RAVU Zoom Antiringing",
+      "type": "repo",
+      "repo": "bjin/mpv-prescalers",
+      "branch": "master",
+      "path_prefix": "gather",
+      "dest": "shaders/RAVU/RAVU Zoom Antiringing",
+      "include": [
+        "ravu-zoom-ar-r*.hook"
+      ]
+    },
+    {
+      "name": "shader-SSimDownscaler",
+      "type": "file",
+      "url": "https://gist.github.com/igv/36508af3ffc84410fe39761d6969be10/raw/SSimDownscaler.glsl",
+      "dest": "shaders/SSim/SSimDownscaler.glsl"
+    },
+    {
+      "name": "shader-SSimSuperRes",
+      "type": "file",
+      "url": "https://gist.github.com/igv/2364ffa6e81540f29cb7ab4c9bc05b6b/raw/SSimSuperRes.glsl",
+      "dest": "shaders/SSim/SSimSuperRes.glsl"
+    },
+    {
+      "name": "shader-adaptive-sharpen",
+      "type": "file",
+      "url": "https://gist.github.com/igv/8a77e4eb8276753b54bb94c1c50c317e/raw/adaptive-sharpen.glsl",
+      "dest": "shaders/adaptive-sharpen.glsl"
+    },
+    {
+      "name": "shader-hdeband",
+      "type": "file",
+      "url": "https://raw.githubusercontent.com/AN3223/dotfiles/master/.config/mpv/shaders/hdeband.glsl",
+      "dest": "shaders/hdeband.glsl"
+    },
+    {
+      "name": "shader-nlmeans",
+      "type": "file",
+      "url": "https://raw.githubusercontent.com/AN3223/dotfiles/master/.config/mpv/shaders/nlmeans.glsl",
+      "dest": "shaders/nlmeans.glsl"
+    }
+  ]
+}

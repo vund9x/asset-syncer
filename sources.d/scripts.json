@@ -1,0 +1,72 @@
+{
+  "sources": [
+    {
+      "name": "uosc",
+      "type": "repo",
+      "repo": "tomasklaen/uosc",
+      "branch": "main",
+      "path_prefix": "src/uosc",
+      "dest": "scripts/uosc"
+    },
+    {
+      "name": "cycle-commands",
+      "type": "file",
+      "url": "https://raw.githubusercontent.com/CogentRedTester/mpv-scripts/master/cycle-commands.lua",
+      "dest": "scripts/cycle-commands.lua"
+    },
+    {
+      "name": "evafast",
+      "type": "file",
+      "url": "https://raw.githubusercontent.com/po5/evafast/master/evafast.lua",
+      "dest": "scripts/evafast.lua"
+    },
+    {
+      "name": "fix-avsync",
+      "type": "file",
+      "url": "https://raw.githubusercontent.com/dyphire/mpv-scripts/master/fix-avsync.lua",
+      "dest": "scripts/fix-avsync.lua"
+    },
+    {
+      "name": "memo",
+      "type": "file",
+      "url": "https://raw.githubusercontent.com/po5/memo/master/memo.lua",
+      "dest": "scripts/memo.lua"
+    },
+    {
+      "name": "protocol_hook",
+      "type": "file",
+      "url": "https://raw.githubusercontent.com/FirefoxUniverse/FirefoxTweaksVN/main/mpv/scripts/protocol_hook.lua",
+      "dest": "scripts/protocol_hook.lua"
+    },
+    {
+      "name": "quality-menu",
+      "type": "file",
+      "url": "https://raw.githubusercontent.com/natural-harmonia-gropius/mpv-quality-menu/master/quality-menu.lua",
+      "dest": "scripts/quality-menu.lua"
+    },
+    {
+      "name": "reload",
+      "type": "file",
+      "url": "https://raw.githubusercontent.com/4e6/mpv-reload/master/main.lua",
+      "dest": "scripts/reload.lua"
+    },
+    {
+      "name": "sponsorblock_minimal",
+      "type": "file",
+      "url": "https://codeberg.org/jouni/mpv_sponsorblock_minimal/raw/branch/master/sponsorblock_minimal.lua",
+      "dest": "scripts/sponsorblock_minimal.lua"
+    },
+    {
+      "name": "thumbfast",
+      "type": "file",
+      "url": "https://raw.githubusercontent.com/po5/thumbfast/master/thumbfast.lua",
+      "dest": "scripts/thumbfast.lua"
+    },
+    {
+      "name": "ytsub",
+      "type": "file",
+      "url": "https://raw.githubusercontent.com/Idlusen/mpv-ytsub/main/ytsub.lua",
+      "dest": "scripts/ytsub.lua"
+    }
+  ]
+}
