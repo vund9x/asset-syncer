@@ -43,7 +43,12 @@ mpv/
 - Bạn có thể tạo thêm `sources.d/my-extras.json` (hoặc bất kỳ tên nào) để
   thêm source riêng — không cần đụng vào `sources.json` hay các file mặc định.
 
-## Build & chạy
+## Cài đặt & Sử dụng
+
+### 1. Tải bản dựng sẵn (Khuyên dùng)
+Bạn có thể tải các bản build sẵn cho Windows, Linux, và macOS tại mục **[Releases](https://github.com/vund9x/asset-syncer/releases)**. Hãy tải về file thực thi phù hợp với hệ điều hành và kiến trúc máy của bạn (ví dụ: `asset-syncer-windows-amd64.exe` cho Windows 64-bit), đặt vào thư mục chạy và bắt đầu cấu hình.
+
+### 2. Tự build từ mã nguồn (Yêu cầu Go 1.21+)
 
 ```powershell
 go build -o asset-syncer.exe
