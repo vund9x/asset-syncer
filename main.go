@@ -137,8 +137,9 @@ func main() {
 	fmt.Printf("\nSummary: updated=%d added=%d unchanged=%d failed=%d\n",
 		stats.updated, stats.added, stats.unchanged, stats.failed)
 	if stats.failed > 0 {
-		os.Exit(1)
+		waitExit(1)
 	}
+	waitExit(0)
 }
 
 type result struct {
@@ -507,5 +508,11 @@ func loadConfigFile(abs string, out *Config, seen map[string]bool, names map[str
 
 func die(f string, a ...any) {
 	fmt.Fprintf(os.Stderr, "error: "+f+"\n", a...)
-	os.Exit(1)
+	waitExit(1)
+}
+
+func waitExit(code int) {
+	fmt.Println("\nNhấn Enter để thoát...")
+	fmt.Scanln()
+	os.Exit(code)
 }
