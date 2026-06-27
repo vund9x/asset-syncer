@@ -50,6 +50,7 @@ jobs:
         with:
           name: asset-${{ matrix.goos }}-${{ matrix.goarch }}
           path: ${{ env.ASSET_PATH }}
+          retention-days: 1
 
   release:
     name: Create Release
