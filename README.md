@@ -161,7 +161,21 @@ Cả `file` lẫn `release` đều có thể tự giải nén `.zip` sau khi t�
 - `include` / `exclude`: glob pattern (so với path tương đối bên trong `dest`).
   Nếu `include` rỗng = lấy tất.
 - `branch`: nếu để `master` mà repo dùng `main` thì tool tự thử lại với `main`.
-- `disabled: true` để tạm tắt một entry.
+- `disabled: true` để tạm tắt một entry mà vẫn giữ nguyên cấu hình. Bỏ trường
+  này hoặc đổi thành `false` để bật lại. Ví dụ:
+
+  ```json
+  {
+    "name": "shader-ACNet",
+    "type": "repo",
+    "repo": "TianZerL/ACNetGLSL",
+    "dest": "shaders/ACNet",
+    "disabled": true
+  }
+  ```
+
+- Source bị tắt sẽ được bỏ qua khi chạy cập nhật, kể cả khi tên của nó được
+  truyền qua `-only`.
 
 ## Ghi chú
 

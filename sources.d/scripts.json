@@ -33,10 +33,17 @@
       "dest": "scripts/memo.lua"
     },
     {
+      "name": "pip",
+      "type": "file",
+      "url": "https://raw.githubusercontent.com/dyphire/mpv-config/refs/heads/master/scripts/pip.lua",
+      "dest": "scripts/pip.lua"
+    },
+    {
       "name": "protocol_hook",
       "type": "file",
       "url": "https://raw.githubusercontent.com/FirefoxUniverse/FirefoxTweaksVN/main/mpv/scripts/protocol_hook.lua",
-      "dest": "scripts/protocol_hook.lua"
+      "dest": "scripts/protocol_hook.lua",
+      "disabled": true
     },
     {
       "name": "quality-menu",
