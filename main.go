@@ -90,11 +90,18 @@ var (
 	only       = flag.String("only", "", "comma-separated names to update (default: all)")
 	jobs       = flag.Int("jobs", 4, "parallel downloads")
 	verbose    = flag.Bool("v", false, "verbose")
+	pauseMode  = flag.String("pause", "auto", "pause before exit: auto (only when double-clicked on Windows), always, never")
 	httpClient = &http.Client{Timeout: 5 * time.Minute}
 )
 
 func main() {
 	flag.Parse()
+	switch strings.ToLower(*pauseMode) {
+	case "auto", "always", "never":
+	default:
+		die("invalid -pause %q (use auto, always or never)", *pauseMode)
+	}
+	colorEnabled = wantColor()
 
 	cfg, err := loadConfig(*cfgPath)
 	if err != nil {
@@ -140,18 +147,19 @@ func main() {
 			defer stats.Unlock()
 			if err != nil {
 				stats.failed++
-				fmt.Printf("[FAIL]   %-25s %v\n", s.Name, err)
+				fmt.Printf("[%s] %-25s %v\n",
+					colorize(ansiRed, fmt.Sprintf("%-7s", "FAIL")), s.Name, err)
 				return
 			}
 			stats.updated += res.changed
 			stats.unchanged += res.unchanged
 			stats.added += res.added
-			tag := "OK"
+			tag, tagColor := "OK", ansiGreen
 			if res.changed > 0 || res.added > 0 {
-				tag = "UPDATED"
+				tag, tagColor = "UPDATED", ansiCyan
 			}
-			fmt.Printf("[%-7s] %-25s changed=%d added=%d unchanged=%d\n",
-				tag, s.Name, res.changed, res.added, res.unchanged)
+			fmt.Printf("[%s] %-25s changed=%d added=%d unchanged=%d\n",
+				colorize(tagColor, fmt.Sprintf("%-7s", tag)), s.Name, res.changed, res.added, res.unchanged)
 		}()
 	}
 	wg.Wait()
@@ -606,16 +614,16 @@ func processCompose(root string, s Source) (result, error) {
 		case before[svc.name] == "" && after != "":
 			res.added++
 			recreate = append(recreate, svc.name)
-			fmt.Printf("  [added]      %-20s %s\n", svc.name, svc.image)
+			fmt.Printf("  %s      %-20s %s\n", colorize(ansiGreen, "[added]"), svc.name, svc.image)
 		case before[svc.name] != "" && after != before[svc.name]:
 			res.changed++
 			recreate = append(recreate, svc.name)
-			fmt.Printf("  [updated]    %-20s %s (%s -> %s)\n",
-				svc.name, svc.image, shortID(before[svc.name]), shortID(after))
+			fmt.Printf("  %s    %-20s %s (%s -> %s)\n",
+				colorize(ansiCyan, "[updated]"), svc.name, svc.image, shortID(before[svc.name]), shortID(after))
 		default:
 			res.unchanged++
 			if *verbose {
-				fmt.Printf("  [current]    %-20s %s\n", svc.name, svc.image)
+				fmt.Printf("  %s    %-20s %s\n", colorize(ansiGray, "[current]"), svc.name, svc.image)
 			}
 		}
 	}
@@ -822,13 +830,25 @@ func die(f string, a ...any) {
 }
 
 func waitExit(code int) {
-	// Keep the prompt for interactive runs (e.g. double-click on Windows),
-	// but don't block cron/systemd jobs or piped output.
-	if isCharDevice(os.Stdin) && isCharDevice(os.Stdout) {
+	if shouldPause() {
 		fmt.Println("\nNhấn Enter để thoát...")
 		fmt.Scanln()
 	}
 	os.Exit(code)
+}
+
+func shouldPause() bool {
+	switch strings.ToLower(*pauseMode) {
+	case "always":
+		return true
+	case "never":
+		return false
+	}
+	// auto: pause only when the executable runs in its own, freshly created
+	// console (double-click on Windows), whose window would close on exit.
+	// A shared console (shell), a pipe (cron/systemd) or a non-Windows run
+	// keeps the output visible some other way, so no prompt is needed.
+	return isCharDevice(os.Stdin) && isCharDevice(os.Stdout) && freshConsole()
 }
 
 func isCharDevice(f *os.File) bool {

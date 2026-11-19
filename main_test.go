@@ -118,3 +118,17 @@ func TestResolveComposeCommandRejectsUnknownEngine(t *testing.T) {
 		t.Fatal("expected error for unknown engine")
 	}
 }
+
+func TestColorize(t *testing.T) {
+	old := colorEnabled
+	defer func() { colorEnabled = old }()
+
+	colorEnabled = false
+	if got := colorize(ansiGreen, "OK"); got != "OK" {
+		t.Fatalf("colorize disabled = %q, want plain %q", got, "OK")
+	}
+	colorEnabled = true
+	if got, want := colorize(ansiGreen, "OK"), "\x1b[32mOK\x1b[0m"; got != want {
+		t.Fatalf("colorize enabled = %q, want %q", got, want)
+	}
+}

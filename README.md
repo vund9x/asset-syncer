@@ -57,7 +57,16 @@ go build -o asset-syncer.exe
 .\asset-syncer.exe -only uosc,memo # chỉ cập nhật một số
 .\asset-syncer.exe -v              # verbose
 .\asset-syncer.exe -jobs 8         # tải song song
+.\asset-syncer.exe -pause always   # luôn chờ Enter trước khi thoát
 ```
+
+- `-pause` (`auto` mặc định | `always` | `never`): `auto` chỉ hiện "Nhấn
+  Enter để thoát..." khi bạn **double-click** file exe trên Windows (console
+  được tạo riêng cho tiến trình). Chạy từ terminal, từ cron/systemd hoặc trên
+  Linux/macOS sẽ không bị chặn. `always` ép luôn chờ Enter, `never` tắt hẳn.
+- Output tự tô màu khi chạy trên terminal: `OK` xanh lá, `UPDATED` cyan,
+  `FAIL` đỏ. Khi redirect/piped (log, cron) màu tự tắt; đặt `NO_COLOR=1`
+  để tắt màu thủ công.
 
 Hoặc chạy trực tiếp không cần build:
 
@@ -244,8 +253,9 @@ Lưu ý:
   (docker socket), chạy tool bằng user phù hợp (hoặc `sudo -E ./asset-syncer`).
 - `-dry-run` chỉ in danh sách service/image sẽ pull, **không** cần cài
   docker/podman — hữu ích để validate config từ máy khác.
-- Có thể chạy định kỳ bằng cron/systemd. Tool chỉ hiện "Nhấn Enter để thoát..."
-  khi stdin là terminal, nên job không bị block:
+- Có thể chạy định kỳ bằng cron/systemd. Với `-pause auto` (mặc định), tool
+  chỉ hiện "Nhấn Enter để thoát..." khi được double-click trên Windows, nên
+  job không bị block:
 
   ```bash
   /srv/bin/asset-syncer -config /srv/bin/sources.json -only homelab-compose
