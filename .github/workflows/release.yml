@@ -40,9 +40,9 @@ jobs:
           if [ "${{ matrix.goos }}" = "windows" ]; then
             BINARY_NAME="${BINARY_NAME}.exe"
           fi
-          
+
           echo "Building $BINARY_NAME..."
-          go build -v -o "$BINARY_NAME" .
+          go build -trimpath -ldflags="-s -w" -v -o "$BINARY_NAME" .
           echo "ASSET_PATH=$BINARY_NAME" >> $GITHUB_ENV
 
       - name: Upload artifact

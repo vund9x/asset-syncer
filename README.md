@@ -1,6 +1,6 @@
 # asset-syncer
 
-Bộ đồng bộ và cập nhật tài nguyên (assets/files) đa năng viết bằng Go, hoạt động theo cơ chế khai báo (declarative configuration). Chương trình đọc danh sách nguồn từ file cấu hình JSON (`sources.json`), tải dữ liệu từ internet (URL trực tiếp, GitHub Repo, GitHub Releases) và **chỉ ghi đè khi nội dung thực sự thay đổi** (so sánh mã băm SHA-256).
+Bộ đồng bộ và cập nhật tài nguyên (assets/files) đa năng viết bằng Go, hoạt động theo cơ chế khai báo (declarative configuration). Chương trình đọc danh sách nguồn từ file cấu hình JSON (`sources.json`), tải dữ liệu từ internet (URL trực tiếp, GitHub Repo, GitHub Releases), cập nhật image Docker/Podman từ `docker-compose.yml`, và **chỉ ghi đè khi nội dung thực sự thay đổi** (so sánh mã băm SHA-256 / image ID).
 
 > **Ghi chú lịch sử:** Ban đầu, dự án này được viết riêng để làm trình cập nhật scripts & shaders cho trình phát video MPV (`mpv-updater`). Tuy nhiên, nhờ kiến trúc thiết kế tổng quát (cho phép tải file, giải nén zip, lọc theo glob pattern...), công cụ này hiện có thể dùng để đồng bộ bất kỳ loại file hoặc thư mục tài nguyên nào.
 
@@ -67,7 +67,7 @@ go run . -dry-run
 
 ## sources.json
 
-Mỗi entry có 2 loại:
+Mỗi entry thuộc một trong các loại sau:
 
 ### `file` — tải 1 file đơn lẻ
 
@@ -176,6 +176,80 @@ Cả `file` lẫn `release` đều có thể tự giải nén `.zip` sau khi t�
 
 - Source bị tắt sẽ được bỏ qua khi chạy cập nhật, kể cả khi tên của nó được
   truyền qua `-only`.
+
+### `compose` — cập nhật image Docker/Podman từ docker-compose.yml
+
+Pull image mới cho các service trong một file compose, rồi **chỉ recreate**
+những container có image thực sự thay đổi (giống triết lý "chỉ ghi khi khác"
+của các type khác). Tool **không sửa** file compose: service pin tag cố định
+(vd. `nginx:1.25.3`) sẽ đứng yên; chỉ các tag "động" như `:latest` mới trôi
+theo registry.
+
+```json
+{
+  "name": "homelab-compose",
+  "type": "compose",
+  "file": "/srv/docker/docker-compose.yml",
+  "services": ["nginx", "grafana"],
+  "engine": "auto",
+  "prune": true,
+  "force_recreate": true
+}
+```
+
+- `file` (bắt buộc): đường dẫn tới file compose — tuyệt đối, hoặc tương đối
+  theo `root`. Nên dùng đường dẫn tuyệt đối khi chạy trên homelab.
+- `services` (tuỳ chọn): chỉ update một số service. Bỏ trống = tất cả service
+  có khai báo `image:`. Service chỉ có `build:` bị bỏ qua.
+- `engine` (tuỳ chọn): `auto` (mặc định), `docker`, hoặc `podman`. Với `auto`,
+  tool thử lần lượt `docker compose` → `podman compose` → `podman-compose`.
+- `compose_cmd` (tuỳ chọn): ép dùng một lệnh khác, vd. `"podman-compose"`,
+  `"docker-compose"` (v1) hoặc đường dẫn tuyệt đối. Khi dùng trường này, tool
+  suy ra engine từ tên lệnh (chứa `docker`/`podman`); nếu không suy ra được
+  thì phải set `engine` thủ công.
+- `prune` (tuỳ chọn, mặc định `false`): sau khi có image được pull/cập nhật
+  thật sự, chạy thêm `<engine> image prune -a -f` để dọn image cũ không còn
+  dùng (`docker image prune -a -f` hoặc `podman image prune -a -f`). Không
+  chạy khi mọi thứ đã up-to-date.
+  **Lưu ý:** cờ `-a` xoá **toàn bộ** image không được container nào sử dụng
+  trên máy — kể cả image của stack khác đang tắt. Chỉ bật nếu bạn chấp nhận
+  điều này.
+- `force_recreate` (tuỳ chọn, mặc định `false`): thêm `--force-recreate` vào
+  lệnh `up -d`. Cần thiết với một số phiên bản `podman-compose` không tự
+  recreate container khi tag giữ nguyên mà chỉ digest đổi (vd. `:latest`
+  được push bản mới). Chỉ áp dụng cho các service có image thay đổi.
+
+Cách hoạt động:
+
+1. Đọc mục `services:` trong file compose (hỗ trợ YAML anchors, `x-`
+   extensions; service không có `image:` bị bỏ qua).
+2. Ghi nhận image ID hiện có (`docker/podman image inspect`).
+3. Chạy `compose pull` cho các service đã chọn.
+4. So sánh image ID trước/sau: chỉ service có image đổi (hoặc image chưa có
+   trên máy) mới được đưa vào `compose up -d`.
+5. Nếu bật `prune`: chạy `<engine> image prune -a -f` (chỉ khi bước 4 có
+   thay đổi).
+6. Báo cáo `[added]` / `[updated]` / unchanged như các type khác.
+
+Ví dụ output trên homelab:
+
+```
+  [updated]    nginx                nginx:latest (6efc10a1... -> 8a2c9f31...)
+[UPDATED] homelab-compose         changed=1 added=0 unchanged=1
+```
+
+Lưu ý:
+
+- Tool gọi CLI docker/podman **cùng máy** với nó. Nếu engine cần quyền root
+  (docker socket), chạy tool bằng user phù hợp (hoặc `sudo -E ./asset-syncer`).
+- `-dry-run` chỉ in danh sách service/image sẽ pull, **không** cần cài
+  docker/podman — hữu ích để validate config từ máy khác.
+- Có thể chạy định kỳ bằng cron/systemd. Tool chỉ hiện "Nhấn Enter để thoát..."
+  khi stdin là terminal, nên job không bị block:
+
+  ```bash
+  /srv/bin/asset-syncer -config /srv/bin/sources.json -only homelab-compose
+  ```
 
 ## Ghi chú
 
